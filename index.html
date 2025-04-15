@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#444444">
+    <link rel="shortcut icon" href="https://landpg.site/pedidos/avatar.png" type="image/x-icon">
+    <meta property="og:title" content="Logra más Ventas por WhatsApp">
+    <meta property="og:description" content="Nota de Pedido para WhatsApp">
+    <meta property="og:url" content="https://landpg.site/pedidos">
+    <meta property="og:image" content="https://landpg.site/pedidos/index-meta.jpg">
     <title>Nota de Pedido</title>
     <style>
         * {
@@ -29,7 +35,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            border-bottom: 2px solid #007bff;
+            border-bottom: 2px solid #278d46;
             padding-bottom: 10px;
             margin-bottom: 15px;
             text-align: center;
@@ -40,7 +46,7 @@
         }
         h2 {
             font-size: 22px;
-            color: #007bff;
+            color: #278d46;
             margin: 0;
         }
         .section {
@@ -51,7 +57,7 @@
             text-transform: uppercase;
             margin-bottom: 8px;
             font-size: 14px;
-            color: #007bff;
+            color: #278d46;
         }
         .input-group {
             display: flex;
@@ -67,10 +73,10 @@
             border-radius: 6px;
         }
         .input-group input:invalid {
-            border-color: #dc3545;
+            border-color: #757575;
         }
         .error-message {
-            color: #dc3545;
+            color: #757575;
             font-size: 12px;
             margin-top: -8px;
             margin-bottom: 5px;
@@ -79,7 +85,7 @@
         
         /* Estilos para la tabla en móvil */
         .product-card {
-            border: 1px solid #007bff;
+            border: 1px solid #278d46;
             border-radius: 6px;
             padding: 12px;
             margin-bottom: 15px;
@@ -97,7 +103,7 @@
         }
         .product-card .label {
             font-weight: bold;
-            color: #007bff;
+            color: #278d46;
             flex: 1;
         }
         .product-card .value {
@@ -108,10 +114,10 @@
         .product-card input[type="number"] {
             width: 70px;
             padding: 6px;
-            border: 1px solid #007bff;
+            border: 1px solid #278d46;
             border-radius: 4px;
             text-align: center;
-            color: #007bff;
+            color: #278d46;
             font-weight: bold;
         }
         
@@ -128,7 +134,7 @@
             text-align: left;
         }
         .product-table th {
-            background: #007bff;
+            background: #278d46;
             color: white;
             font-weight: bold;
             text-transform: uppercase;
@@ -137,13 +143,13 @@
         .product-table input[type="number"] {
             width: 60px;
             padding: 5px;
-            border: 1px solid #007bff;
+            border: 1px solid #278d46;
             border-radius: 4px;
             text-align: center;
         }
         .product-table td:last-child {
             font-weight: bold;
-            color: #007bff;
+            color: #278d46;
         }
         
         /* Total del pedido */
@@ -155,7 +161,7 @@
             background: #f8f9fa;
             border-radius: 6px;
             margin: 15px 0;
-            color: #007bff;
+            color: #278d46;
         }
         .order-total::before {
             content: "€";
@@ -166,7 +172,7 @@
         textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid #007bff;
+            border: 1px solid #278d46;
             border-radius: 6px;
             resize: none;
             height: 100px;
@@ -176,7 +182,7 @@
         /* Botón */
         button {
             width: 100%;
-            background: linear-gradient(to right, #007bff, #0056b3);
+            background: linear-gradient(to right, #278d46, #1a4321);
             color: white;
             padding: 14px;
             font-size: 16px;
@@ -188,7 +194,7 @@
             font-weight: 600;
         }
         button:hover {
-            background: linear-gradient(to right, #0056b3, #003f88);
+            background: linear-gradient(to right, #1a4321, #003f88);
         }
         
         /* Media Queries para diferentes tamaños */
@@ -223,7 +229,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="nota.jpg" alt="Logo Nota de Pedido">
+            <img src="nota.png" alt="Logo Nota de Pedido">
             <h2>Nota de Pedido</h2>
         </div>
 
@@ -381,7 +387,7 @@
                 const error = document.getElementById(field.errorId);
                 
                 if (!input.value.trim()) {
-                    input.style.borderColor = '#dc3545';
+                    input.style.borderColor = '#757575';
                     error.style.display = 'block';
                     isValid = false;
                 } else {
@@ -432,7 +438,7 @@
                 orderMessage += `\nNotas adicionales: ${additionalNotes}`;
             }
 
-            const whatsappUrl = `https://wa.me/34643992947?text=${encodeURIComponent(orderMessage)}`;
+            const whatsappUrl = `https://wa.me/34641083923?text=${encodeURIComponent(orderMessage)}`;
             window.open(whatsappUrl, '_blank');
         }
 
