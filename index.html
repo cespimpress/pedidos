@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota de Pedido</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            padding: 10px;
+            margin: 0;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .header img {
+            max-height: 60px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 22px;
+            color: #007bff;
+            margin: 0;
+        }
+        .section {
+            margin-bottom: 15px;
+        }
+        .section-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #007bff;
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .input-group input {
+            flex: 1 1 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        .input-group input:invalid {
+            border-color: #dc3545;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: -8px;
+            margin-bottom: 5px;
+            display: none;
+        }
+        
+        /* Estilos para la tabla en móvil */
+        .product-card {
+            border: 1px solid #007bff;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: rgba(0, 123, 255, 0.05);
+        }
+        .product-card .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0, 123, 255, 0.1);
+        }
+        .product-card .row:last-child {
+            border-bottom: none;
+        }
+        .product-card .label {
+            font-weight: bold;
+            color: #007bff;
+            flex: 1;
+        }
+        .product-card .value {
+            flex: 2;
+            text-align: right;
+            color: #333;
+        }
+        .product-card input[type="number"] {
+            width: 70px;
+            padding: 6px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        /* Estilos para la tabla en escritorio */
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .product-table th, .product-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .product-table th {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+        .product-table input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .product-table td:last-child {
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        /* Total del pedido */
+        .order-total {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: #007bff;
+        }
+        .order-total::before {
+            content: "€";
+            margin-right: 5px;
+        }
+        
+        /* Notas adicionales */
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #007bff;
+            border-radius: 6px;
+            resize: none;
+            height: 100px;
+            font-size: 14px;
+        }
+        
+        /* Botón */
+        button {
+            width: 100%;
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        button:hover {
+            background: linear-gradient(to right, #0056b3, #003f88);
+        }
+        
+        /* Media Queries para diferentes tamaños */
+        @media (min-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            .header {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+            .header img {
+                margin-bottom: 0;
+            }
+            .section-title {
+                font-size: 16px;
+            }
+            .input-group input {
+                flex: 1 1 45%;
+            }
+            .product-table {
+                display: table;
+            }
+            .product-card {
+                display: none;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="nota.jpg" alt="Logo Nota de Pedido">
+            <h2>Nota de Pedido</h2>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Detalles del Cliente</div>
+            <div class="input-group">
+                <input type="text" id="customerName" placeholder="Nombre del cliente" required>
+                <div class="error-message" id="nameError">Este campo es obligatorio</div>
+                <input type="text" id="customerPhone" placeholder="Teléfono" required>
+                <div class="error-message" id="phoneError">Este campo es obligatorio</div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="customerAddress" placeholder="Dirección" required>
+                <div class="error-message" id="addressError">Este campo es obligatorio</div>
+                <input type="email" id="customerEmail" placeholder="Correo Electrónico" required>
+                <div class="error-message" id="emailError">Este campo es obligatorio</div>
+            </div>
+        </div>
+
+        <!-- Versión móvil (tarjetas) -->
+        <div class="product-card">
+            <div class="row">
+                <span class="label">Producto:</span>
+                <span class="value">Blusa de algodón</span>
+            </div>
+            <div class="row">
+                <span class="label">Cantidad:</span>
+                <span class="value"><input type="number" id="product1QtyMobile" min="0" placeholder="0" value="0" oninput="calculateTotalMobile()"></span>
+            </div>
+            <div class="row">
+                <span class="label">Descripción:</span>
+                <span class="value">Blusa 100% algodón</span>
+            </div>
+            <div class="row">
+                <span class="label">Precio Unitario:</span>
+                <span class="value">20.00</span>
+            </div>
+            <div class="row">
+                <span class="label">Total:</span>
+                <span class="value" id="product1TotalMobile">0.00</span>
+            </div>
+        </div>
+        
+        <div class="product-card">
+            <div class="row">
+                <span class="label">Producto:</span>
+                <span class="value">Pantalón de mezclilla</span>
+            </div>
+            <div class="row">
+                <span class="label">Cantidad:</span>
+                <span class="value"><input type="number" id="product2QtyMobile" min="0" placeholder="0" value="0" oninput="calculateTotalMobile()"></span>
+            </div>
+            <div class="row">
+                <span class="label">Descripción:</span>
+                <span class="value">Pantalón denim de alta calidad</span>
+            </div>
+            <div class="row">
+                <span class="label">Precio Unitario:</span>
+                <span class="value">35.00</span>
+            </div>
+            <div class="row">
+                <span class="label">Total:</span>
+                <span class="value" id="product2TotalMobile">0.00</span>
+            </div>
+        </div>
+
+        <!-- Versión escritorio (tabla) -->
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Descripción</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Blusa de algodón</td>
+                    <td><input type="number" id="product1Qty" min="0" placeholder="0" value="0" oninput="calculateTotalDesktop()"></td>
+                    <td>Blusa 100% algodón</td>
+                    <td>20.00</td>
+                    <td id="product1Total">0.00</td>
+                </tr>
+                <tr>
+                    <td>Pantalón de mezclilla</td>
+                    <td><input type="number" id="product2Qty" min="0" placeholder="0" value="0" oninput="calculateTotalDesktop()"></td>
+                    <td>Pantalón denim de alta calidad</td>
+                    <td>35.00</td>
+                    <td id="product2Total">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section">
+            <div class="section-title">Total del Pedido</div>
+            <div class="order-total" id="orderTotal">0.00</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Notas adicionales</div>
+            <textarea id="additionalNotes" placeholder="Escribe aquí cualquier instrucción adicional..."></textarea>
+        </div>
+
+        <button type="button" onclick="validateAndSendOrder()">Enviar Pedido por WhatsApp</button>
+    </div>
+
+    <script>
+        // Función para calcular totales en versión móvil
+        function calculateTotalMobile() {
+            const product1Qty = parseInt(document.getElementById('product1QtyMobile').value) || 0;
+            const product2Qty = parseInt(document.getElementById('product2QtyMobile').value) || 0;
+
+            const product1Total = product1Qty * 20.00;
+            const product2Total = product2Qty * 35.00;
+
+            document.getElementById('product1TotalMobile').textContent = product1Total.toFixed(2);
+            document.getElementById('product2TotalMobile').textContent = product2Total.toFixed(2);
+
+            updateOrderTotal(product1Total + product2Total);
+        }
+
+        // Función para calcular totales en versión escritorio
+        function calculateTotalDesktop() {
+            const product1Qty = parseInt(document.getElementById('product1Qty').value) || 0;
+            const product2Qty = parseInt(document.getElementById('product2Qty').value) || 0;
+
+            const product1Total = product1Qty * 20.00;
+            const product2Total = product2Qty * 35.00;
+
+            document.getElementById('product1Total').textContent = product1Total.toFixed(2);
+            document.getElementById('product2Total').textContent = product2Total.toFixed(2);
+
+            updateOrderTotal(product1Total + product2Total);
+        }
+
+        // Función para actualizar el total general
+        function updateOrderTotal(total) {
+            document.getElementById('orderTotal').textContent = total.toFixed(2);
+        }
+
+        // Función para validar campos obligatorios
+        function validateFields() {
+            let isValid = true;
+            const fields = [
+                { id: 'customerName', errorId: 'nameError' },
+                { id: 'customerPhone', errorId: 'phoneError' },
+                { id: 'customerAddress', errorId: 'addressError' },
+                { id: 'customerEmail', errorId: 'emailError' }
+            ];
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const error = document.getElementById(field.errorId);
+                
+                if (!input.value.trim()) {
+                    input.style.borderColor = '#dc3545';
+                    error.style.display = 'block';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#ccc';
+                    error.style.display = 'none';
+                }
+            });
+
+            return isValid;
+        }
+
+        // Función para validar y enviar el pedido
+        function validateAndSendOrder() {
+            if (validateFields()) {
+                sendOrder();
+            }
+        }
+
+        // Función para enviar el pedido
+        function sendOrder() {
+            const name = document.getElementById('customerName').value;
+            const phone = document.getElementById('customerPhone').value;
+            const address = document.getElementById('customerAddress').value;
+            const email = document.getElementById('customerEmail').value;
+            const orderTotal = document.getElementById('orderTotal').textContent;
+
+            // Obtener cantidades (de móvil o escritorio)
+            let product1Qty, product2Qty;
+            
+            if (window.innerWidth >= 768) {
+                // Versión escritorio
+                product1Qty = parseInt(document.getElementById('product1Qty').value) || 0;
+                product2Qty = parseInt(document.getElementById('product2Qty').value) || 0;
+            } else {
+                // Versión móvil
+                product1Qty = parseInt(document.getElementById('product1QtyMobile').value) || 0;
+                product2Qty = parseInt(document.getElementById('product2QtyMobile').value) || 0;
+            }
+
+            let orderMessage = `Hola, quisiera realizar el siguiente pedido:\n\n`;
+            orderMessage += `Nombre: ${name}\nTeléfono: ${phone}\nDirección: ${address}\nCorreo: ${email}\n\n`;
+            orderMessage += `- Blusa de algodón: ${product1Qty} unidades (20.00€ c/u)\n`;
+            orderMessage += `- Pantalón de mezclilla: ${product2Qty} unidades (35.00€ c/u)\n`;
+            orderMessage += `\nTotal del pedido: €${orderTotal}\n`;
+
+            const additionalNotes = document.getElementById('additionalNotes').value;
+            if (additionalNotes) {
+                orderMessage += `\nNotas adicionales: ${additionalNotes}`;
+            }
+
+            const whatsappUrl = `https://wa.me/34643992947?text=${encodeURIComponent(orderMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Inicializar calculando el total
+        if (window.innerWidth >= 768) {
+            calculateTotalDesktop();
+        } else {
+            calculateTotalMobile();
+        }
+
+        // Actualizar cálculos cuando cambia el tamaño de la pantalla
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                calculateTotalDesktop();
+            } else {
+                calculateTotalMobile();
+            }
+        });
+
+        // Validación en tiempo real para campos obligatorios
+        document.getElementById('customerName').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.style.borderColor = '#ccc';
+                document.getElementById('nameError').style.display = 'none';
+            }
+        });
+        document.getElementById('customerPhone').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.style.borderColor = '#ccc';
+                document.getElementById('phoneError').style.display = 'none';
+            }
+        });
+        document.getElementById('customerAddress').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.style.borderColor = '#ccc';
+                document.getElementById('addressError').style.display = 'none';
+            }
+        });
+        document.getElementById('customerEmail').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.style.borderColor = '#ccc';
+                document.getElementById('emailError').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
